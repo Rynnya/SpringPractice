@@ -20,14 +20,19 @@ public class Config {
         return new Dog("Mike");
     }
 
-    @Bean
-    public Parrot getParrot() {
+    @Bean(name = "Koko")
+    public Parrot getParrotKoko() {
         return new Parrot("Koko");
+    }
+
+    @Bean(name = "Kale")
+    public Parrot getParrotKale() {
+        return new Parrot("Kale");
     }
 
     @Bean
     public Person getPerson() {
-        return new Person("David");
+        return new Person(getCat(), getDog(), getParrotKoko(), getParrotKale(), "David");
     }
 
 }

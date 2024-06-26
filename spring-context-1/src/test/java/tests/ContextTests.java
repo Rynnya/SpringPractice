@@ -39,11 +39,19 @@ public class ContextTests {
     }
 
     @Test
-    @DisplayName("Verify that Parrot bean was successfully registered in Spring context")
-    public void testParrotBeanWasAdded() {
-        Parrot parrot = context.getBean(Parrot.class);
+    @DisplayName("Verify that Parrot bean with qualifier Koko was successfully registered in Spring context")
+    public void testParrotBeanKokoWasAdded() {
+        Parrot parrot = context.getBean("Koko", Parrot.class);
 
         assertEquals("Koko", parrot.getName());
+    }
+
+    @Test
+    @DisplayName("Verify that Parrot bean with qualifier Kale was successfully registered in Spring context")
+    public void testParrotBeanKaleWasAdded() {
+        Parrot parrot = context.getBean("Kale", Parrot.class);
+
+        assertEquals("Kale", parrot.getName());
     }
 
     @Test
@@ -51,6 +59,10 @@ public class ContextTests {
     public void testPersonBeanWasAdded() {
         Person person = context.getBean(Person.class);
 
+        assertEquals("Vanessa", person.getCat().getName());
+        assertEquals("Mike", person.getDog().getName());
+        assertEquals("Koko", person.getParrotKoko().getName());
+        assertEquals("Kale", person.getParrotKale().getName());
         assertEquals("David", person.getName());
     }
 }
