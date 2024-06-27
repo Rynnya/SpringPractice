@@ -1,8 +1,7 @@
 package tests;
 
-import applications.BankClientsApp;
-import applications.TransferByPhoneApp;
-import main.Application;
+import applications.Application;
+import main.MainApplication;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,32 +10,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {Application.class})
+@ContextConfiguration(classes = {MainApplication.class})
 public class AppTests {
 
-    @Autowired
-    private BankClientsApp bankClientsApp;
+    private final int SOURCE_TEST_USER_ID = 0;
+
+    private final int DESTINATION_TEST_USER_ID = 1;
+
+    private final int TEST_AMOUNT = 100;
 
     @Autowired
-    private TransferByPhoneApp transferByPhoneApp;
+    private Application application;
 
     @Test
-    @DisplayName("Verify that BankClientsApp component correctly detects whether or not provided user is client")
-    public void testBankClientsAppCorrectness() {
-        assertTrue(bankClientsApp.isUserExist(0));
-        assertTrue(bankClientsApp.isUserExist(1));
-        assertFalse(bankClientsApp.isUserExist(10));
-        assertFalse(bankClientsApp.isUserExist(-1));
-    }
-
-    @Test
-    @DisplayName("Verify that TransferByPhoneApp component correctly works with all preconditions being correct")
-    public void testTransferByPhoneAppCorrectness() {
-        assertDoesNotThrow(() -> transferByPhoneApp.transfer(0, 1, 10));
+    @DisplayName("Verify that Application component works correctly")
+    public void testApplicationCorrectness() {
+        assertDoesNotThrow(() -> application.run(SOURCE_TEST_USER_ID, DESTINATION_TEST_USER_ID, TEST_AMOUNT));
     }
 
 }
