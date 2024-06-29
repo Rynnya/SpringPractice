@@ -18,6 +18,7 @@
     <modules>
         <module>spring-context-1</module>
         <module>spring-context-2</module>
+        <module>spring-context-3</module>
     </modules>
 
     <dependencies>
