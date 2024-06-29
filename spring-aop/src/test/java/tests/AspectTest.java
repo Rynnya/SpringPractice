@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {Application.class})
-public class AspectTests {
+public class AspectTest {
 
     @Autowired
     private ArgumentsApp argumentsApp;

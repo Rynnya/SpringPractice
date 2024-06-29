@@ -13,26 +13,6 @@ import java.util.Collection;
 @Component
 public class NotEmptyAspect {
 
-    private boolean isStringType(Object object) {
-        return object instanceof String;
-    }
-
-    private void verifyString(String string) {
-        if (string.isEmpty()) {
-            throw new IllegalArgumentException("Provided string must not be empty");
-        }
-    }
-
-    private boolean isCollectionType(Object object) {
-        return object instanceof Collection<?>;
-    }
-
-    private void verifyCollection(Collection<?> collection) {
-        if (collection.isEmpty()) {
-            throw new IllegalArgumentException("Provided collection must not be empty");
-        }
-    }
-
     @Before("@annotation(NotEmpty)")
     public void verifyArguments(JoinPoint joinPoint) {
         log.info(String.format("verifyArguments called before '%s'", joinPoint.getSignature().getName()));
@@ -57,6 +37,26 @@ public class NotEmptyAspect {
         }
 
         log.info(String.format("'%s' successfully passed argument verification", joinPoint.getSignature().getName()));
+    }
+
+    private boolean isStringType(Object object) {
+        return object instanceof String;
+    }
+
+    private void verifyString(String string) {
+        if (string.isEmpty()) {
+            throw new IllegalArgumentException("Provided string must not be empty");
+        }
+    }
+
+    private boolean isCollectionType(Object object) {
+        return object instanceof Collection<?>;
+    }
+
+    private void verifyCollection(Collection<?> collection) {
+        if (collection.isEmpty()) {
+            throw new IllegalArgumentException("Provided collection must not be empty");
+        }
     }
 
 }
