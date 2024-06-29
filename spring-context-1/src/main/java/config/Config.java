@@ -10,6 +10,10 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Config {
 
+    private final String KOKO_PARROT_NAME = "Koko";
+
+    private final String KALE_PARROT_NAME = "Kale";
+
     @Bean
     public Cat getCat() {
         return new Cat("Vanessa");
@@ -20,14 +24,14 @@ public class Config {
         return new Dog("Mike");
     }
 
-    @Bean(name = "Koko")
+    @Bean(name = KOKO_PARROT_NAME)
     public Parrot getParrotKoko() {
-        return new Parrot("Koko");
+        return new Parrot(KOKO_PARROT_NAME);
     }
 
-    @Bean(name = "Kale")
+    @Bean(name = KALE_PARROT_NAME)
     public Parrot getParrotKale() {
-        return new Parrot("Kale");
+        return new Parrot(KALE_PARROT_NAME);
     }
 
     @Bean
