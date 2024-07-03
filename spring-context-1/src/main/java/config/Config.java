@@ -4,6 +4,7 @@ import beans.Cat;
 import beans.Dog;
 import beans.Parrot;
 import beans.Person;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
@@ -35,8 +36,8 @@ public class Config {
     }
 
     @Bean
-    public Person getPerson() {
-        return new Person(getCat(), getDog(), getParrotKoko(), getParrotKale(), "David");
+    public Person getPerson(Cat cat, Dog dog, @Qualifier(KOKO_PARROT_NAME) Parrot koko, @Qualifier(KALE_PARROT_NAME) Parrot kale) {
+        return new Person(cat, dog, koko, kale, "David");
     }
 
 }
