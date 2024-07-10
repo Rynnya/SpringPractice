@@ -1,9 +1,11 @@
 package repository;
 
+import entities.Cart;
 import entities.Client;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +19,13 @@ public class LocalClientRepository implements ClientRepository {
     @Override
     public long save(Client client) {
         long id = generateId();
+
+        Cart cart = new Cart();
+        cart.setProducts(new HashSet<>());
+        cart.setPromocode("");
+
         client.setId(id);
+        client.setCart(cart);
 
         clients.add(client);
         return id;

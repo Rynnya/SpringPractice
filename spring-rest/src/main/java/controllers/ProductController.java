@@ -58,7 +58,7 @@ public class ProductController {
 
     @PutMapping
     public Product updateProduct(@RequestBody Product product) {
-        log.info("Обновление продукта {}", product);
+        log.info("Обновление продукта {}", product.getId());
 
         productService.update(product);
 

@@ -29,7 +29,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<Void> createClient(@Validated @RequestBody Client client) throws URISyntaxException {
-        log.info("Добавление клиента {}", client);
+        log.info("Добавление клиента {}", client.getId());
 
         long id = clientService.save(client);
 

@@ -22,4 +22,6 @@ public class Client {
     @NotBlank(message = "Почта пользователя должен быть указан.")
     private String email;
 
+    private Cart cart;
+
 }
