@@ -20,6 +20,7 @@
         <module>spring-context-2</module>
         <module>spring-context-3</module>
         <module>spring-aop</module>
+        <module>spring-mvc</module>
     </modules>
 
     <dependencies>
