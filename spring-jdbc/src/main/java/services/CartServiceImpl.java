@@ -1,7 +1,6 @@
 package services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.CartRepository;
 
@@ -9,7 +8,6 @@ import repository.CartRepository;
 @Service
 public class CartServiceImpl implements CartService {
 
-    @Autowired
     private final CartRepository cartRepository;
 
     @Override

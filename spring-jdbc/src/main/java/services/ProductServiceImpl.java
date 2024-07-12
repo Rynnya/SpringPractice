@@ -2,7 +2,6 @@ package services;
 
 import entities.Product;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.ProductRepository;
 
@@ -13,7 +12,6 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
     private final ProductRepository productRepository;
 
     @Override

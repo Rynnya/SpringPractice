@@ -3,9 +3,9 @@ package repository;
 import entities.Client;
 import entities.Product;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import services.ClientService;
 import services.ProductService;
 
@@ -21,13 +21,12 @@ import static repository.DBConstants.JDBC;
 @AllArgsConstructor
 public class DBCartRepository implements CartRepository {
 
-    @Autowired
     private final ProductService productService;
 
-    @Autowired
     private final ClientService clientService;
 
     @Override
+    @Transactional
     public boolean addToCartById(long userId, long productId) {
         return clientService
                 .findById(userId)
@@ -36,6 +35,7 @@ public class DBCartRepository implements CartRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteFromCartById(long userId, long productId) {
         return clientService
                 .findById(userId)

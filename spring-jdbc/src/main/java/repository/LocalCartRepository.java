@@ -3,7 +3,6 @@ package repository;
 import entities.Client;
 import entities.Product;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import services.ClientService;
 import services.ProductService;
@@ -12,10 +11,8 @@ import services.ProductService;
 @AllArgsConstructor
 public class LocalCartRepository implements CartRepository {
 
-    @Autowired
     private final ProductService productService;
 
-    @Autowired
     private final ClientService clientService;
 
     @Override

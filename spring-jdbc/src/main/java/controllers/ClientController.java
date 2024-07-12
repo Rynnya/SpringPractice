@@ -3,7 +3,6 @@ package controllers;
 import entities.Client;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,6 @@ import java.net.URISyntaxException;
 @RequestMapping("clients")
 public class ClientController {
 
-    @Autowired
     private final ClientService clientService;
 
     @PostMapping

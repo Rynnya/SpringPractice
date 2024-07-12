@@ -2,7 +2,6 @@ package services;
 
 import entities.Client;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.ClientRepository;
 
@@ -12,7 +11,6 @@ import java.util.Optional;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-    @Autowired
     private final ClientRepository clientRepository;
 
     @Override

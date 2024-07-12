@@ -3,6 +3,7 @@ package repository;
 import entities.Product;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,6 +20,7 @@ import static repository.DBConstants.JDBC;
 public class DBProductRepository implements ProductRepository {
 
     @Override
+    @Transactional
     public long save(Product product) {
         var insertSql = "INSERT INTO products (name, price, amount) VALUES (?,?,?);";
 
@@ -42,6 +44,7 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
+    @Transactional
     public Optional<Product> findById(long id) {
         var selectSql = "SELECT * FROM products WHERE id = ?;";
 
@@ -68,6 +71,7 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
+    @Transactional
     public List<Product> findAll(String name) {
         var selectSql = "SELECT * FROM products WHERE name LIKE ?;";
         List<Product> products = new ArrayList<>();
@@ -95,11 +99,12 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
+    @Transactional
     public void update(Product product) {
-        var uodateSql = "UPDATE products SET name = ?, price = ? WHERE id = ?;";
+        var updateSql = "UPDATE products SET name = ?, price = ? WHERE id = ?;";
 
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(uodateSql)) {
+             var prepareStatement = connection.prepareStatement(updateSql)) {
             prepareStatement.setString(1, product.getName());
             prepareStatement.setFloat(2, product.getPrice());
             prepareStatement.setLong(3, product.getId());
@@ -111,6 +116,7 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteById(long id) {
         var deleteSql = "DELETE FROM products WHERE id = ?;";
 
