@@ -16,17 +16,22 @@ import static repository.DBConstants.JDBC;
 
 @Primary
 @Repository
+@Transactional
 public class DBClientRepository implements ClientRepository {
 
-    @Override
-    @Transactional
-    public long save(Client client) {
-        var cartInsertSql = "INSERT INTO carts (promocode) VALUES (?);";
-        var clientInsertSql = "INSERT INTO clients (name, username, password, email, cart_id) VALUES (?,?,?,?,?);";
+    private final String SAVE_CART_SQL = "INSERT INTO carts (promocode) VALUES (?)";
 
+    private final String SAVE_CLIENT_SQL = "INSERT INTO clients (name, username, password, email, cart_id) VALUES (?,?,?,?,?)";
+
+    private final String FIND_BY_ID_SQL = "SELECT * FROM clients JOIN carts ON clients.cart_id = carts.id WHERE clients.id = ?";
+
+    private final String DELETE_BY_ID_SQL = "DELETE FROM clients WHERE id = ?;";
+
+    @Override
+    public long save(Client client) {
         try (var connection = DriverManager.getConnection(JDBC);
-             var cartStatement = connection.prepareStatement(cartInsertSql, Statement.RETURN_GENERATED_KEYS);
-             var clientStatement = connection.prepareStatement(clientInsertSql, Statement.RETURN_GENERATED_KEYS)) {
+             var cartStatement = connection.prepareStatement(SAVE_CART_SQL, Statement.RETURN_GENERATED_KEYS);
+             var clientStatement = connection.prepareStatement(SAVE_CLIENT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             connection.setAutoCommit(false);
 
             cartStatement.setString(1, "");
@@ -59,12 +64,9 @@ public class DBClientRepository implements ClientRepository {
     }
 
     @Override
-    @Transactional
     public Optional<Client> findById(long id) {
-        var selectSql = "SELECT * FROM clients JOIN carts ON clients.cart_id = carts.id WHERE clients.id = ?;";
-
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(selectSql)) {
+             var prepareStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             prepareStatement.setLong(1, id);
 
             var resultSet = prepareStatement.executeQuery();
@@ -92,12 +94,9 @@ public class DBClientRepository implements ClientRepository {
     }
 
     @Override
-    @Transactional
     public boolean deleteById(long id) {
-        var deleteSql = "DELETE FROM clients WHERE id = ?;";
-
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(deleteSql)) {
+             var prepareStatement = connection.prepareStatement(DELETE_BY_ID_SQL)) {
             prepareStatement.setLong(1, id);
 
             return prepareStatement.executeUpdate() > 0;

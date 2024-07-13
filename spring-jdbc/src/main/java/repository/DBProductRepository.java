@@ -17,15 +17,23 @@ import static repository.DBConstants.JDBC;
 
 @Primary
 @Repository
+@Transactional
 public class DBProductRepository implements ProductRepository {
 
-    @Override
-    @Transactional
-    public long save(Product product) {
-        var insertSql = "INSERT INTO products (name, price, amount) VALUES (?,?,?);";
+    private final String SAVE_PRODUCT_SQL = "INSERT INTO products (name, price, amount) VALUES (?,?,?)";
 
+    private final String FIND_BY_ID_SQL = "SELECT * FROM products WHERE id = ?";
+
+    private final String SELECT_ALL_PRODUCTS_SQL = "SELECT * FROM products WHERE name LIKE ?";
+
+    private final String UPDATE_PRODUCT_SQL = "UPDATE products SET name = ?, price = ? WHERE id = ?";
+
+    private final String DELETE_PRODUCT_SQL = "DELETE FROM products WHERE id = ?";
+
+    @Override
+    public long save(Product product) {
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+             var prepareStatement = connection.prepareStatement(SAVE_PRODUCT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatement.setString(1, product.getName());
             prepareStatement.setFloat(2, product.getPrice());
             prepareStatement.setInt(3, 1);
@@ -44,12 +52,9 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public Optional<Product> findById(long id) {
-        var selectSql = "SELECT * FROM products WHERE id = ?;";
-
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(selectSql)) {
+             var prepareStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             prepareStatement.setLong(1, id);
 
             var resultSet = prepareStatement.executeQuery();
@@ -71,13 +76,11 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public List<Product> findAll(String name) {
-        var selectSql = "SELECT * FROM products WHERE name LIKE ?;";
         List<Product> products = new ArrayList<>();
 
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(selectSql)) {
+             var prepareStatement = connection.prepareStatement(SELECT_ALL_PRODUCTS_SQL)) {
             prepareStatement.setString(1, "%" + nullToEmptyString(name) + "%");
 
             var resultSet = prepareStatement.executeQuery();
@@ -99,12 +102,9 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public void update(Product product) {
-        var updateSql = "UPDATE products SET name = ?, price = ? WHERE id = ?;";
-
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(updateSql)) {
+             var prepareStatement = connection.prepareStatement(UPDATE_PRODUCT_SQL)) {
             prepareStatement.setString(1, product.getName());
             prepareStatement.setFloat(2, product.getPrice());
             prepareStatement.setLong(3, product.getId());
@@ -116,12 +116,9 @@ public class DBProductRepository implements ProductRepository {
     }
 
     @Override
-    @Transactional
     public boolean deleteById(long id) {
-        var deleteSql = "DELETE FROM products WHERE id = ?;";
-
         try (var connection = DriverManager.getConnection(JDBC);
-             var prepareStatement = connection.prepareStatement(deleteSql)) {
+             var prepareStatement = connection.prepareStatement(DELETE_PRODUCT_SQL)) {
             prepareStatement.setLong(1, id);
 
             return prepareStatement.executeUpdate() > 0;

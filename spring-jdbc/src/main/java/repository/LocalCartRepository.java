@@ -4,20 +4,18 @@ import entities.Client;
 import entities.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
-import services.ClientService;
-import services.ProductService;
 
 @Repository
 @AllArgsConstructor
 public class LocalCartRepository implements CartRepository {
 
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
 
     @Override
     public boolean addToCartById(long userId, long productId) {
-        return clientService
+        return clientRepository
                 .findById(userId)
                 .map(client -> findProductAndAddToCart(client, productId))
                 .orElse(false);
@@ -25,14 +23,14 @@ public class LocalCartRepository implements CartRepository {
 
     @Override
     public boolean deleteFromCartById(long userId, long productId) {
-        return clientService
+        return clientRepository
                 .findById(userId)
                 .map(client -> deleteFromCart(client, productId))
                 .orElse(false);
     }
 
     private boolean findProductAndAddToCart(Client client, long productId) {
-        return productService
+        return productRepository
                 .findById(productId)
                 .map(product -> addProductToCart(client, product))
                 .orElse(false);

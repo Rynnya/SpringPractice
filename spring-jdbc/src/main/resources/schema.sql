@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS products
 
 CREATE TABLE IF NOT EXISTS carts
 (
-    id        INTEGER       auto_increment,
+    id        INTEGER       AUTO_INCREMENT,
     promocode VARCHAR(255),
     CONSTRAINT carts_id_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS clients
 (
-    id       INTEGER      auto_increment,
+    id       INTEGER      AUTO_INCREMENT,
     name     VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS clients
 
 CREATE TABLE IF NOT EXISTS products_carts
 (
-    id          INTEGER auto_increment,
+    id          INTEGER AUTO_INCREMENT,
     id_product  INTEGER NOT NULL,
     amount      INTEGER NOT NULL,
     id_cart     INTEGER NOT NULL,
