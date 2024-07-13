@@ -18,21 +18,27 @@ import java.util.Optional;
 
 @Primary
 @Repository
+@Transactional
 @AllArgsConstructor
 public class DBClientRepository implements ClientRepository {
+
+    private final String SAVE_CART_SQL = "INSERT INTO carts (promocode) VALUES (?)";
+
+    private final String SAVE_CLIENT_SQL = "INSERT INTO clients (name, username, password, email, cart_id) VALUES (?,?,?,?,?)";
+
+    private final String FIND_BY_ID_SQL = "SELECT * FROM clients JOIN carts ON clients.cart_id = carts.id WHERE clients.id = ?";
+
+    private final String DELETE_BY_ID_SQL = "DELETE FROM clients WHERE id = ?;";
 
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional
     public long save(Client client) {
-        var cartInsertSql = "INSERT INTO carts (promocode) VALUES (?);";
-        var clientInsertSql = "INSERT INTO clients (name, username, password, email, cart_id) VALUES (?,?,?,?,?);";
         KeyHolder cartKeyHolder = new GeneratedKeyHolder();
         KeyHolder clientKeyHolder = new GeneratedKeyHolder();
 
         PreparedStatementCreator cartInsertCreator = connection -> {
-            var cartStatement = connection.prepareStatement(cartInsertSql, Statement.RETURN_GENERATED_KEYS);
+            var cartStatement = connection.prepareStatement(SAVE_CART_SQL, Statement.RETURN_GENERATED_KEYS);
             cartStatement.setString(1, "");
             return cartStatement;
         };
@@ -40,7 +46,7 @@ public class DBClientRepository implements ClientRepository {
         jdbcTemplate.update(cartInsertCreator, cartKeyHolder);
 
         PreparedStatementCreator clientInsertCreator = connection -> {
-            var clientStatement = connection.prepareStatement(clientInsertSql, Statement.RETURN_GENERATED_KEYS);
+            var clientStatement = connection.prepareStatement(SAVE_CLIENT_SQL, Statement.RETURN_GENERATED_KEYS);
             clientStatement.setString(1, client.getName());
             clientStatement.setString(2, client.getLogin());
             clientStatement.setString(3, client.getPassword());
@@ -55,12 +61,9 @@ public class DBClientRepository implements ClientRepository {
     }
 
     @Override
-    @Transactional
     public Optional<Client> findById(long id) {
-        var selectSql = "SELECT * FROM clients JOIN carts ON clients.cart_id = carts.id WHERE clients.id = ?;";
-
         PreparedStatementCreator preparedStatementCreator = connection -> {
-            var prepareStatement = connection.prepareStatement(selectSql);
+            var prepareStatement = connection.prepareStatement(FIND_BY_ID_SQL);
             prepareStatement.setLong(1, id);
             return prepareStatement;
         };
@@ -72,12 +75,9 @@ public class DBClientRepository implements ClientRepository {
     }
 
     @Override
-    @Transactional
     public boolean deleteById(long id) {
-        var deleteSql = "DELETE FROM clients WHERE id = ?;";
-
         PreparedStatementCreator preparedStatementCreator = connection -> {
-            var prepareStatement = connection.prepareStatement(deleteSql);
+            var prepareStatement = connection.prepareStatement(DELETE_BY_ID_SQL);
             prepareStatement.setLong(1, id);
             return prepareStatement;
         };
