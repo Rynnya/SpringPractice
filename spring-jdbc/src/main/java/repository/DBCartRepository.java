@@ -24,34 +24,8 @@ public class DBCartRepository implements CartRepository {
 
     private final String DELETE_FROM_CART_SQL = "DELETE FROM products_carts WHERE id_cart = ? AND id_product = ?";
 
-    private final ProductRepository productRepository;
-
-    private final ClientRepository clientRepository;
-
     @Override
-    public boolean addToCartById(long userId, long productId) {
-        return clientRepository
-                .findById(userId)
-                .map(client -> findProductAndAddToCart(client, productId))
-                .orElse(false);
-    }
-
-    @Override
-    public boolean deleteFromCartById(long userId, long productId) {
-        return clientRepository
-                .findById(userId)
-                .map(client -> deleteFromCart(client, productId))
-                .orElse(false);
-    }
-
-    private boolean findProductAndAddToCart(Client client, long productId) {
-        return productRepository
-                .findById(productId)
-                .map(product -> addProductToCart(client, product))
-                .orElse(false);
-    }
-
-    private boolean addProductToCart(Client client, Product product) {
+    public boolean addProductToCart(Client client, Product product) {
         try (var connection = DriverManager.getConnection(JDBC);
              var prepareStatement = connection.prepareStatement(ADD_PRODUCT_TO_CART_SQL, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatement.setLong(1, product.getId());
@@ -71,7 +45,8 @@ public class DBCartRepository implements CartRepository {
         }
     }
 
-    private boolean deleteFromCart(Client client, long productId) {
+    @Override
+    public boolean deleteProductFromCart(Client client, long productId) {
         try (var connection = DriverManager.getConnection(JDBC);
              var prepareStatement = connection.prepareStatement(DELETE_FROM_CART_SQL)) {
             prepareStatement.setLong(1, client.getCart().getId());

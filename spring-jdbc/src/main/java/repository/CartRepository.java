@@ -1,9 +1,12 @@
 package repository;
 
+import entities.Client;
+import entities.Product;
+
 public interface CartRepository {
 
-    boolean addToCartById(long userId, long productId);
+    boolean addProductToCart(Client client, Product product);
 
-    boolean deleteFromCartById(long userId, long productId);
+    boolean deleteProductFromCart(Client client, long productId);
 
 }

@@ -9,38 +9,13 @@ import org.springframework.stereotype.Repository;
 @AllArgsConstructor
 public class LocalCartRepository implements CartRepository {
 
-    private final ProductRepository productRepository;
-
-    private final ClientRepository clientRepository;
-
     @Override
-    public boolean addToCartById(long userId, long productId) {
-        return clientRepository
-                .findById(userId)
-                .map(client -> findProductAndAddToCart(client, productId))
-                .orElse(false);
-    }
-
-    @Override
-    public boolean deleteFromCartById(long userId, long productId) {
-        return clientRepository
-                .findById(userId)
-                .map(client -> deleteFromCart(client, productId))
-                .orElse(false);
-    }
-
-    private boolean findProductAndAddToCart(Client client, long productId) {
-        return productRepository
-                .findById(productId)
-                .map(product -> addProductToCart(client, product))
-                .orElse(false);
-    }
-
-    private boolean addProductToCart(Client client, Product product) {
+    public boolean addProductToCart(Client client, Product product) {
         return client.getCart().getProducts().add(product);
     }
 
-    private boolean deleteFromCart(Client client, long productId) {
+    @Override
+    public boolean deleteProductFromCart(Client client, long productId) {
         return client.getCart().getProducts().removeIf(product -> product.getId() == productId);
     }
 
